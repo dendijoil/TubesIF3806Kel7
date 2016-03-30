@@ -1,31 +1,49 @@
 package applikasibarang;
 
+import java.util.ArrayList;
+
 public class Gudang{
 	private String nama;
+        private long id;
 	public int jum_bar_g=0;
-	private Barang[] daftarBarang=new Barang[10];
+	private ArrayList<Barang> daftarBarang = new ArrayList();
 	
-	public Gudang(String nama){
+	public Gudang(long id,String nama){
 		setNamaGudang(nama);
+                setId(id);
 	}
 	
 	public void addBarang(Barang b){
-		if(jum_bar_g<10){
-			daftarBarang[jum_bar_g]=b;
-			jum_bar_g++;
-		}
+            daftarBarang.add(b);
+            jum_bar_g++;
+	}
+        
+        public void setId(long id){
+            this.id=id;
 	}
 	
-	public void ambilBarang(long ids){
-		for(int j=0;j<jum_bar_g;j++){	
-			if(daftarBarang[j].getId()==ids){
-				for(int k=j;k<(jum_bar_g-1);k++){
-					daftarBarang[k]=daftarBarang[k+1];
-					jum_bar_g=jum_bar_g-1;
-				}
-			}
-		}
+	public long getId(){
+            return id;
 	}
+        public long getJumbarG(){
+            return daftarBarang.size();
+	}
+        
+        public Barang getBarangGudang(int x){
+		return daftarBarang.get(x);
+	}
+	
+	public void deleteBarangGudang(long ids){
+            for(int i=0;i<daftarBarang.size();i++){
+                if(daftarBarang.get(i).getId()==ids){
+                    daftarBarang.remove(i);
+                    jum_bar_g--;
+                }
+                else{
+                    System.out.println("Data Tidak Ditemukan");
+                }
+            }
+        }
 	
 	public void setNamaGudang(String nama){
 		this.nama=nama;
@@ -40,42 +58,12 @@ public class Gudang{
 		System.out.println("=============================");
 		System.out.println("Gudang : "+getNamaGudang());
 		System.out.println("=============================");
-		for (int i=0;i<jum_bar_g;i++){
-			System.out.print("Space ke-"+(i+1)+" : ");
-			if (daftarBarang[i] instanceof Mobil){
-				System.out.println("Mobil");
-				Mobil dmobil = (Mobil) daftarBarang[i];
-				mbl++;
-				System.out.println("ID        			 : "+daftarBarang[i].getId());
-				System.out.println("Nama                 : "+daftarBarang[i].getNama());
-				System.out.println("Merk 		     	 : "+dmobil.getMerk());
-				System.out.println("CC 				 	 : "+dmobil.getCc());
-			}
-			if (daftarBarang[i] instanceof Motor){
-				System.out.println("Motor");
-				Motor dmotor = (Motor) daftarBarang[i];
-				mtr++;
-				System.out.println("ID        			 : "+daftarBarang[i].getId());
-				System.out.println("Nama                 : "+daftarBarang[i].getNama());
-				System.out.println("Merk 		     	 : "+dmotor.getMerk());
-				System.out.println("CC 				 	 : "+dmotor.getCc());
-			}
-			else{
-				System.out.println("Unidentified");
-				uniden++;
-				System.out.println("ID        			 : "+daftarBarang[i].getId());
-				System.out.println("Nama                 : "+daftarBarang[i].getNama());
-			}
-			System.out.println("");
-		}
-		
-		System.out.println("=======Statistik=======");
-		System.out.println("Mobil      : "+mbl);
-		System.out.println("Motor      : "+mtr);
-		System.out.println("Unidentified  : "+uniden);
-		System.out.println("");
-		System.out.println("Jumlah Barang  : "+jum_bar_g);
-		System.out.println("=======================");
+		for (int i=0;i<daftarBarang.size();i++){
+			System.out.print("Barang ke-"+(i+1)+" : ");
+                        System.out.println("ID : "+daftarBarang.get(i).getId());
+			System.out.println("Nama : "+daftarBarang.get(i).getNama());
+                        System.out.println("Jenis : "+daftarBarang.get(i).getjenis());
+                        System.out.println("=============================");
+                }
 	}
-	
 }
