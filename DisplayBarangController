@@ -1,0 +1,99 @@
+package Controller;
+
+import Views.Display;
+import Views.DisplaySemiBarang;
+import Views.Menu;
+import Views.View;
+import applikasibarang.ApplikasiBarang;
+import applikasibarang.Barang;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import Views.DisplayBarang;
+import Views.DisplayPetugas;
+/**
+ *
+ * @author dendijoil
+ */
+public class ControllerDisplayBarang extends MouseAdapter implements ActionListener {
+
+    private ApplikasiBarang model;
+    private View view;
+    private DisplayBarang dis_bar;
+    private DisplayPetugas dis_pet;
+    public ControllerDisplayBarang(ApplikasiBarang model) {
+        this.model = model;
+        DisplaySemiBarang d = new DisplaySemiBarang();
+        d.addMouseListener(this);
+        d.setVisible(true);
+        d.addListener((ActionListener) this);
+        view = d;
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+        if (view instanceof DisplaySemiBarang) {
+            DisplaySemiBarang dis = (DisplaySemiBarang) view;
+//          DisplaySemiBarang dissem_bar = new DisplaySemiBarang();
+            DisplaySemiBarang dissem_bar = (DisplaySemiBarang) view;
+            dissem_bar.setVisible(true);
+            dissem_bar.addListener((ActionListener) this);
+            dis.dispose();
+            view = dissem_bar;
+            if (source.equals(dis.getBtnOk())) {
+                String s = dissem_bar.getComboTipe();
+                System.out.println(dissem_bar.getIdJenis().getText());
+                long idjen = Long.parseLong(dissem_bar.getIdJenis().getText());
+                if (s.equals("Penyedia")) {
+                    dis_bar = new DisplayBarang();
+                    dis_bar.setVisible(true);
+                    dis_bar.addListener((ActionListener) this);
+                    view = dis_bar;
+                    setTextAreaBarangPenyedia(model, (DisplayBarang) view, idjen);
+                    // if(source.equals(dis_bar.getBtnOk())){
+                    //   new ControllerMenu(model);
+                    // dis_bar.dispose();
+                    //}
+                } else if (s.equals("Gudang")) {
+                    DisplayBarang dis_bar = new DisplayBarang();
+                    dis_bar.setVisible(true);
+                    dis_bar.addListener((ActionListener) this);
+                    view = dis_bar;
+                    setTextAreaBarangGudang(model, (DisplayBarang) view, idjen);
+                    if (source.equals(dis_bar.getBtnOk())) {
+                        new ControllerDisplayBarang(model);
+                        dis_bar.dispose();
+                    }
+                }
+                dissem_bar.reset();
+            } else if (source.equals(dis.getBtnBack())) {
+                new ControllerMenu(model);
+                dis.dispose();
+            }
+        }
+        if (view instanceof DisplayBarang) {
+            dis_bar = (DisplayBarang) view;
+            if (source.equals(dis_bar.getBtnOk())) {
+                new ControllerMenu(model);
+                dis_bar.dispose();
+            }
+        }
+    }
+
+    public void setTextAreaBarangPenyedia(ApplikasiBarang model, DisplayBarang view, long id) {
+        String mantab = model.getBarangPenyedia(model.getPenyedia(id));
+        view.getTextAreaBarang().setText(mantab);
+    }
+
+    public void setTextAreaBarangGudang(ApplikasiBarang model, DisplayBarang view, long id) {
+        String mantab = model.getBarangGudang(model.getGudang(id));
+        view.getTextAreaBarang().setText(mantab);
+    }
+    public void setTextAreaPetugas(ApplikasiBarang model, DisplayPetugas view, long id) {
+        String mantab = model.getPetugas();
+        //dis_pet = view;
+        view.getTextAreaPetugas().setText(mantab);
+    }
+}
