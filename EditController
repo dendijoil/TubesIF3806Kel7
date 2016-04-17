@@ -1,0 +1,144 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Controller;
+
+import Views.AddBarang;
+import Views.AddGudang;
+import Views.AddMenu;
+import Views.AddPenyedia;
+import Views.AddPetugas;
+import Views.DeleteBarang;
+import Views.DeleteGudang;
+import Views.DeleteMenu;
+import Views.DeletePenyedia;
+import Views.DeletePetugas;
+import Views.EditBarang;
+import Views.EditGudang;
+import Views.EditPenyedia;
+import Views.EditPetugas;
+import Views.View;
+import aplikasibarang.AplikasiBarang;
+import aplikasibarang.Barang;
+
+
+/**
+ *
+ * @author Orryza
+ */
+public class ControllerEdit {
+ private AplikasiBarang model;
+ private View view;
+ 
+ public ControllerEdit(AplikasiBarang model){
+     this.model = model;
+     EditMenu e = new EditMenu();
+     e.setVisible(true);
+     e.addListener((ActioListener) this);
+     view = e;
+ }
+ 
+ public void actionPerformed(ActionEvent ae){
+     Edit source = ae.getSource();
+     if(view instanceof EditMenu){
+         EditMenu em = (EditMenu) view;
+         if(source.equals(em.getBttneditBarang())){
+                EditBarang edt_bar = new EditBarang();
+                edt_bar.setVisible(true);
+                edt_bar.addListener((ActionListener) this);
+                em.dispose();
+                view = edt_bar;
+            }
+            else if(source.equals(em.getBttnEditGudang())){
+                EditGudang edt_gud = new EditGudang();
+                edt_gud.setVisible(true);
+                edt_gud.addListener((ActionListener) this);
+                em.dispose();
+                view = edt_gud;
+            }
+            else if(source.equals(em.getBttnEditPetugas())){
+                EditPetugas del_pet = new EditPetugas();
+                edt_pet.setVisible(true);
+                edt_pet.addListener((ActionListener) this);
+                em.dispose();
+                view = edt_pet;
+            }
+            else if(source.equals(dm.getBtnDelPenyedia())){
+                DeletePenyedia del_peny = new DeletePenyedia();
+                del_peny.setVisible(true);
+                del_peny.addListener((ActionListener) this);
+                dm.dispose();
+                view = del_peny;
+            }
+        }
+        else if(view instanceof EditBarang){
+            EditBarang edt_b = (EditBarang) view;
+            if (source.equals(edt_b.getBtnBack())) {
+                EditMenu em = new EditMenu();
+                em.setVisible(true);
+                em.addListener((ActionListener) this);
+                edt_b.dispose();
+                view = em;
+            }
+            else if(source.equals(edt_b.getBtnOk())){
+                long idb=edt_b.getIdBarang();
+                long id=edt_b.getIdJenis();
+                String s = edt_b.getComboTipeDel();
+                if(s.equals("Penyedia")){
+                    model.editBarangPenyedia(id, idb);
+                }
+                else if(s.equals("Gudang")){
+                    model.editBarangGudang(id, idb);
+                }
+                edt_b.reset();
+            }
+        }
+        else if(view instanceof EditGudang){
+            EditGudang edt_g = (EditGudang) view;
+            if (source.equals(edt_g.getBtnBack())) {
+                EditMenu em = new EditMenu();
+                em.setVisible(true);
+                em.addListener((ActionListener) this);
+                edt_g.dispose();
+                view = em;
+            }
+            else if(source.equals(edt_g.getBtnOk())){
+                long ids=edt_g.getIdGudang();
+                model.editGudang(ids);
+                edt_g.reset();
+            }
+        }
+        else if(view instanceof EditPenyedia){
+            EditPenyedia edt_peny = (EditPenyedia) view;
+            if (source.equals(edt_peny.getBtnBack())) {
+                EditMenu em = new EditMenu();
+                em.setVisible(true);
+                em.addListener((ActionListener) this);
+                edt_peny.dispose();
+                view = em;
+            }
+            else if(source.equals(edt_peny.getBtnOk())){
+                long ids=edt_peny.getIdPenyedia();
+                model.editPenyedia(ids);
+                edt_peny.reset();
+            }
+        }
+        else if(view instanceof EditPetugas){
+            EditPetugas edt_pet = (EditPetugas) view;
+            if (source.equals(edt_pet.getBtnBack())) {
+                EditMenu em = new EditMenu();
+                em.setVisible(true);
+                em.addListener((ActionListener) this);
+                edt_pet.dispose();
+                view = em;
+            }
+            else if(source.equals(edt_pet.getBtnOk())){
+                long ids=edt_pet.getIdPetugas();
+                model.editPetugas(ids);
+                edt_pet.reset();
+            }
+        }
+    }
+}
