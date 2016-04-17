@@ -5,17 +5,13 @@
  */
 package applikasibarang;
 
-/**
- *
- * @author iky
- */
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ApplikasiBarang {
-    ArrayList<Penyedia> daftarPenyedia = new ArrayList();
-    ArrayList<Petugas> daftarPetugas = new ArrayList();
-    ArrayList<Gudang> daftarGudang = new ArrayList();
+    public ArrayList<Penyedia> daftarPenyedia = new ArrayList();
+    public ArrayList<Petugas> daftarPetugas = new ArrayList();
+    public ArrayList<Gudang> daftarGudang = new ArrayList();
     
     public void addPenyedia(String nama, long id){
         Penyedia pen = new Penyedia(nama,id);
@@ -145,11 +141,11 @@ public class ApplikasiBarang {
             }
         }
     }
-    
-    public void menuAdd(){
+        public void menuAdd(){
         System.out.println("1. add Gudang");
         System.out.println("2. add Penyedia");
         System.out.println("3. add Petugas");
+        System.out.println("4. add Barang");
         Scanner s=new Scanner(System.in);
         System.out.print("input : ");
         int n = s.nextInt();
@@ -176,6 +172,26 @@ public class ApplikasiBarang {
                 System.out.println("Nama Petugas : ");
                 String namz=s.next();
                 addPetugas(namz,idpet);
+                break;
+            }
+            case 4:{
+                System.out.println("jenis (penyedia/gudang) : ");
+                String jen = s.next();
+                System.out.println("ID Barang : ");
+                long idbar=s.nextLong();
+                System.out.println("Nama Barang : ");
+                String namz=s.next();
+                Barang b = new Barang(idbar,namz);
+                if(jen.equals("penyedia")){
+                    System.out.println("ID Penyedia : ");
+                    long zz=s.nextLong();
+                    addBarangPenyedia(zz,b);
+                }
+                else{
+                    System.out.println("ID Gudang : ");
+                    long zz=s.nextLong();
+                    addBarangGudang(zz,b);
+                }
                 break;
             }
             default: System.out.println("Tidak ada menu tersebut"); break;
@@ -213,6 +229,23 @@ public class ApplikasiBarang {
                 editPetugas(idpet,namz);
                 break;
             }
+            case 4:{
+                System.out.println("jenis (penyedia/gudang) : ");
+                String jen = s.next();
+                System.out.println("ID Barang : ");
+                long idbar=s.nextLong();
+                if(jen.equals("penyedia")){
+                    System.out.println("ID Penyedia : ");
+                    long zz=s.nextLong();
+                    deleteBarangPenyedia(zz,idbar);
+                }
+                else{
+                    System.out.println("ID Gudang : ");
+                    long zz=s.nextLong();
+                    deleteBarangGudang(zz,idbar);
+                }
+                break;
+            }
             default: System.out.println("Tidak ada menu tersebut"); break;
         }
     }
@@ -220,6 +253,7 @@ public class ApplikasiBarang {
         System.out.println("1. delete Gudang");
         System.out.println("2. delete Penyedia");
         System.out.println("3. delete Petugas");
+        System.out.println("4. Delete Barang");
         Scanner s=new Scanner(System.in);
         System.out.print("input : ");
         int n = s.nextInt();
@@ -243,6 +277,96 @@ public class ApplikasiBarang {
                 break;
             }
             default: System.out.println("Tidak ada menu tersebut"); break;
+        }
+    }
+    public Penyedia getPenyedia(long id){
+        int zz=0;
+        for(int i = 0;i<daftarPenyedia.size();i++){
+            if(id==daftarPenyedia.get(i).getId()){
+                zz=i;
+            }
+        }
+        return daftarPenyedia.get(zz);
+    }
+    public Gudang getGudang(long id){
+        int zz=0;
+        for(int i = 0;i<daftarGudang.size();i++){
+            if(id==daftarGudang.get(i).getId()){
+                zz=i;
+            }
+        }
+        return daftarGudang.get(zz);
+    }
+    public String getGudang(){
+        String wow="";
+        for(Gudang z : daftarGudang){
+            wow+=(z.toString()+"\n");
+        }
+        return wow;
+    }
+    public String getBarangPenyedia(Penyedia p){
+        String wow="";
+        for(int i = 0;i<p.getJumbarP();i++){
+            wow+=(p.toString());
+        }
+        return wow;
+    }
+    public String getBarangGudang(Gudang g){
+        String wow="";
+        for(int i = 0;i<g.getJumbarG();i++){
+            wow+=(g.toString());
+        }
+        return wow;
+    }
+    public String getPenyedia(){
+        String wow="";
+        for(Penyedia z : daftarPenyedia){
+            wow+=(z.toString()+"\n");
+        }
+        return wow;
+    }
+    public String getPetugas(){
+        String wow="";
+        for(Petugas z : daftarPetugas){
+            wow+=(z.toString()+"\n");
+        }
+        return wow;
+    }
+    
+    public void editBarangPenyedia(long idp,long idb,String namz){
+        for(int i=0;i<daftarPenyedia.size();i++){
+            if(idp==daftarPenyedia.get(i).getId()){
+               for(int j=0;j<daftarPenyedia.get(i).getJumbarP();j++){
+                   if(daftarPenyedia.get(i).getBarangPenyedia(j).getId()==idb){
+                       daftarPenyedia.get(i).getBarangPenyedia(j).setNama(namz);
+                       System.out.println("Barang Diubah");
+                   }
+                   else{
+                       System.out.println("Data Tidak Ditemukan Barang tersebut");
+                   }
+               }
+            } 
+            else{
+                System.out.println("Data Tidak Ditemukan Penyedia tersebut");
+            }
+        }
+    }
+    public void editBarangGudang(long idg,long idb,String namz){
+        for(int i=0;i<daftarGudang.size();i++){
+            if(idg==daftarGudang.get(i).getId()){
+               for(int j=0;j<daftarGudang.get(i).getJumbarG();j++){
+                   if(daftarGudang.get(i).getBarangGudang(j).getId()==idb){
+                       daftarGudang.get(i).getBarangGudang(j).setNama(namz);
+                       System.out.println("Barang Diubah");
+                   }
+                   else{
+                       System.out.println("Data Tidak Ditemukan Barang tersebut");
+                   }
+               }
+            } 
+            else{
+                System.out.println("Data Tidak Ditemukan Penyedia tersebut");
+            }
         }
     }
     public void menuDisplay(){
@@ -285,7 +409,6 @@ public class ApplikasiBarang {
             }
         }
     }
-    
     public void menuDisplayBarang(){
         System.out.println("1. Display Barang Gudang");
         System.out.println("2. Display Barang Penyedia");
